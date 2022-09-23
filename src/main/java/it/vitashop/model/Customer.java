@@ -3,6 +3,7 @@ package it.vitashop.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -21,18 +22,15 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Customer extends User{
 	
-	@Column(nullable = false)
 	private String name;
 	
-	@Column(nullable = false)
 	private String lastName;
 	
-	@Column(nullable = false)
 	private String phoneNumber;
 	
 	@OneToOne
 	private BillingAddress billingAddress;
 	
-	@OneToMany(mappedBy = "customer")
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<ShippingAddress> shippingAddresses = new ArrayList<>();
 }
