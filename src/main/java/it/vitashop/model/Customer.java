@@ -33,4 +33,7 @@ public class Customer extends User{
 	
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<ShippingAddress> shippingAddresses = new ArrayList<>();
+	
+	@OneToOne
+	private ShoppingCart shoppingCart;
 }
