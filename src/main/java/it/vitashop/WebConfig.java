@@ -6,9 +6,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import it.vitashop.model.dto.customer.converter.CustomerRequestToCustomer;
 import it.vitashop.model.dto.product.converter.ProductSaveRequestToProduct;
+import it.vitashop.model.dto.product.converter.ProductToProductResponse;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
 
@@ -16,5 +16,6 @@ public class WebConfig implements WebMvcConfigurer{
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new CustomerRequestToCustomer());
         registry.addConverter(new ProductSaveRequestToProduct());
+        registry.addConverter(new ProductToProductResponse());
     }
 }

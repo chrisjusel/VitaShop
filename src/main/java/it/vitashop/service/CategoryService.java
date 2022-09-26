@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import it.vitashop.exception.CategoryNotFoundException;
 import it.vitashop.model.Category;
-import it.vitashop.model.CategoryType;
+import it.vitashop.model.Categories;
 import it.vitashop.repository.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,13 +20,13 @@ public class CategoryService {
 	
 	public Category save (Category category) {
 		log.info("Adding new product...");
-		log.info("New product '" + category.getCategoryType() + "' addedd");
+		log.info("New product '" + category.getName() + "' addedd");
 		return categoryRepository.save(category);
 	}
 	
-	public Category findByCategoryType(CategoryType categoryType) {
-		Optional<Category> categoryResult = categoryRepository.findByCategoryType(categoryType);
-		log.info("Recovering category by name " + categoryType);
+	public Category findByCategoryName(Categories categoryName) {
+		Optional<Category> categoryResult = categoryRepository.findByName(categoryName);
+		log.info("Recovering category by name " + categoryName);
 		
 		if(categoryResult.isPresent()) {
 			log.info("Category recovered");

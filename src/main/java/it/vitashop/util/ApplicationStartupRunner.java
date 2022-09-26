@@ -7,9 +7,9 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
 import it.vitashop.model.Category;
-import it.vitashop.model.CategoryType;
+import it.vitashop.model.Categories;
 import it.vitashop.model.Product;
-import it.vitashop.model.dto.product.ProductSaveRequest;
+import it.vitashop.model.dto.product.ProductRequest;
 import it.vitashop.model.dto.product.converter.ProductSaveRequestToProduct;
 import it.vitashop.service.CategoryService;
 import it.vitashop.service.ProductService;
@@ -39,7 +39,7 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 		if (populateDatabase) {
 			initCategories();
 
-			ProductSaveRequest prod = new ProductSaveRequest();
+			ProductRequest prod = new ProductRequest();
 
 			prod.setCategory("ELECTRONICS");
 			prod.setDescrption("Il miglior rasoio di napoli");
@@ -55,9 +55,9 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 	}
 
 	private void initCategories() {
-		for (CategoryType categoryType : CategoryType.values()) {
+		for (Categories categoryType : Categories.values()) {
 			Category saveToDb = new Category();
-			saveToDb.setCategoryType(categoryType);
+			saveToDb.setName(categoryType);
 			categoryService.save(saveToDb);
 		}
 	}

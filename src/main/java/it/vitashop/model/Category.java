@@ -26,12 +26,12 @@ public class Category {
 	private Long id;
 	
     @Enumerated(EnumType.STRING)
-	private CategoryType categoryType;
+	private Categories name;
     
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
     
-    public Category(CategoryType categoryType) {
-    	this.categoryType = categoryType;
+    public Category(Categories name) {
+    	this.name = name;
     }
 }

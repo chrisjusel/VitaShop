@@ -1,6 +1,6 @@
 package it.vitashop.model;
 
-public enum CategoryType {
+public enum Categories {
 	HOUSEHOLD,
 	ELECTRONICS,
 	GARDENING
