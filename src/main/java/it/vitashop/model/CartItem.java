@@ -24,6 +24,7 @@ public class CartItem {
 	
 	@OneToOne
 	private Product product;
+	
 	private int quantity;
 	
 	@ManyToOne

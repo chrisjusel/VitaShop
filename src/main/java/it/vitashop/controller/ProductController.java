@@ -47,13 +47,14 @@ public class ProductController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody ProductRequest request) {
+	public ResponseEntity<ProductResponse> update(@PathVariable Long id, @RequestBody ProductRequest request) {
 		log.info("New '" + new Object() {
 		}.getClass().getEnclosingMethod().getName() + "' request to " + this.getClass().getName());
 
-		Product response = productService.update(id, conversionService.convert(request, Product.class));
+		Product product = productService.update(id, conversionService.convert(request, Product.class));
+		ProductResponse response = conversionService.convert(product, ProductResponse.class);
 
-		return new ResponseEntity<Product>(response, HttpStatus.OK);
+		return new ResponseEntity<ProductResponse>(response, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
@@ -78,11 +79,11 @@ public class ProductController {
 	}
 
 	@GetMapping("/category")
-	public ResponseEntity<Page<ProductResponse>> findByCategory(@RequestParam String category, Pageable pageable) {
+	public ResponseEntity<Page<ProductResponse>> findByCategory(@RequestParam String name, Pageable pageable) {
 		log.info("New '" + new Object() {
 		}.getClass().getEnclosingMethod().getName() + "' request to " + this.getClass().getName());
 
-		Page<ProductResponse> response = productService.findByCategory(category, pageable)
+		Page<ProductResponse> response = productService.findByCategory(name, pageable)
 				.map(t -> conversionService.convert(t, ProductResponse.class));
 
 		return new ResponseEntity<Page<ProductResponse>>(response, HttpStatus.OK);

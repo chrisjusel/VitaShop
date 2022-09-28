@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import it.vitashop.exception.CategoryNotFoundException;
 import it.vitashop.model.Categories;
 import it.vitashop.model.Product;
 import it.vitashop.model.dto.product.ProductRequest;
@@ -19,11 +20,15 @@ public class ProductRequestToProduct implements Converter<ProductRequest, Produc
 	public Product convert(ProductRequest source) {
 		Product target = new Product();
 
-		target.setCategory(categoryService.findByCategoryName(Categories.valueOf(source.getCategory())));
-		target.setDescrption(source.getDescrption());
-		target.setImageFile(source.getImageFile());
-		target.setName(source.getName());
-		target.setPrice(source.getPrice());
+		try {
+			target.setCategory(categoryService.findByCategoryName(Categories.valueOf(source.getCategory())));
+			target.setDescrption(source.getDescrption());
+			target.setImageFile(source.getImageFile());
+			target.setName(source.getName());
+			target.setPrice(source.getPrice());
+		} catch (IllegalArgumentException e) {
+			throw new CategoryNotFoundException("No categories are present with name " + source.getCategory());
+		}
 
 		return target;
 	}

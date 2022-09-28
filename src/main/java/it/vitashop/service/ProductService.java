@@ -2,6 +2,8 @@ package it.vitashop.service;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,7 @@ public class ProductService {
 		return productRepository.save(product);
 	}
 
+	@Transactional
 	public Product update(Long id, Product product) {
 		Optional<Product> productResult = productRepository.findById(id);
 		log.info("Updating product...");

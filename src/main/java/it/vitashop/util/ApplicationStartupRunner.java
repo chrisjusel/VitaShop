@@ -54,7 +54,6 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void initProducts() {
 		try {
 			log.info("Reading all products from CSV");
