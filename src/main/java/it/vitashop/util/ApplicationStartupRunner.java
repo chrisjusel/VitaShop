@@ -25,7 +25,7 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 
 	private static final String PRODUCTS_FILE = "src/main/resources/static/products.csv";
 
-	@Value("${populate.database}")
+	@Value("${it.VitaShop.populate.database}")
 	private boolean populateDatabase;
 
 	@Autowired

@@ -16,18 +16,19 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 public class ShoppingCart {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Double totalPrice;
 	
-	@OneToOne
-	private Customer customer;
+	private Double totalPrice;
 	
 	@OneToMany(mappedBy = "shoppingCart")
 	private List<CartItem> cartItems = new ArrayList<>();
+	
+	public ShoppingCart() {
+		totalPrice = 0.0;
+	}
 }

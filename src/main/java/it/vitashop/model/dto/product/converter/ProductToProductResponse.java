@@ -1,15 +1,12 @@
 package it.vitashop.model.dto.product.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Component;
 
 import it.vitashop.model.Product;
 import it.vitashop.model.dto.product.ProductResponse;
 
+@Component
 public class ProductToProductResponse implements Converter<Product, ProductResponse> {
 
 	@Override

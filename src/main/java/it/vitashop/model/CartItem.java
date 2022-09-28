@@ -27,6 +27,8 @@ public class CartItem {
 	
 	private int quantity;
 	
+	private Double subtotal;
+	
 	@ManyToOne
 	@JoinColumn
 	private ShoppingCart shoppingCart;
