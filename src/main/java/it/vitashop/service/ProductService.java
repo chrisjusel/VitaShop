@@ -72,7 +72,7 @@ public class ProductService {
 		}
 	}
 
-	public Page<Product> getAll(Pageable pageable) {
+	public Page<Product> findAll(Pageable pageable) {
 		log.info("Recovering all products...");
 		log.info("All products recovered");
 		return productRepository.findAll(pageable);

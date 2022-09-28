@@ -1,23 +1,29 @@
 package it.vitashop.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
-import it.vitashop.model.Category;
 import it.vitashop.model.Categories;
+import it.vitashop.model.Category;
 import it.vitashop.model.Product;
-import it.vitashop.model.dto.product.ProductRequest;
-import it.vitashop.model.dto.product.converter.ProductSaveRequestToProduct;
 import it.vitashop.service.CategoryService;
 import it.vitashop.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
+@Slf4j
 public class ApplicationStartupRunner implements CommandLineRunner {
+
+	private static final String PRODUCTS_FILE = "src/main/resources/static/products.csv";
 
 	@Value("${populate.database}")
 	private boolean populateDatabase;
@@ -31,25 +37,11 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 	@Autowired
 	private ConversionService conversionService;
 
-	@Autowired
-	private ProductSaveRequestToProduct conv;
-
 	@Override
 	public void run(String... args) throws Exception {
 		if (populateDatabase) {
 			initCategories();
-
-			ProductRequest prod = new ProductRequest();
-
-			prod.setCategory("ELECTRONICS");
-			prod.setDescrption("Il miglior rasoio di napoli");
-			prod.setImageFile("Pantalone");
-			prod.setName("Rasoio Napoletano");
-			prod.setPrice(15.99);
-
-			Product save = conv.convert(prod);
-
-			productService.save(save);
+			initProducts();
 		}
 
 	}
@@ -62,4 +54,18 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private void initProducts() {
+		try {
+			log.info("Reading all products from CSV");
+			FileReader fileReader = new FileReader(PRODUCTS_FILE);
+			ProductCsvReader.read(fileReader).stream().map(t -> conversionService.convert(t, Product.class))
+					.collect(Collectors.toList()).forEach(t -> productService.save(t));
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

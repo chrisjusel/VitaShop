@@ -10,7 +10,7 @@ import it.vitashop.model.dto.product.ProductRequest;
 import it.vitashop.service.CategoryService;
 
 @Component
-public class ProductSaveRequestToProduct implements Converter<ProductRequest, Product> {
+public class ProductRequestToProduct implements Converter<ProductRequest, Product> {
 
 	@Autowired
 	private CategoryService categoryService;
