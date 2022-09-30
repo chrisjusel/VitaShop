@@ -1,4 +1,4 @@
-package it.vitashop.controller;
+package it.vitashop.service;
 
 import java.util.Optional;
 
@@ -33,6 +33,16 @@ public class CartItemService {
 			cartItemUpdated.setQuantity(cartItem.getQuantity());
 			cartItemUpdated.setSubtotal(calculateSubtotal(cartItem));
 			return cartItemUpdated;
+		} else {
+			throw new CartItemNotFoundException("No cart items found with id " + id);
+		}
+	}
+	
+	public void delete(Long id) {
+		log.info("Removing cart item...");
+		if(cartItemRepository.findById(id).isPresent()) {
+			cartItemRepository.deleteById(id);
+			log.info("Cart item " + id + "removed");
 		} else {
 			throw new CartItemNotFoundException("No cart items found with id " + id);
 		}

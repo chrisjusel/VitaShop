@@ -36,7 +36,6 @@ public class ProductController {
 
 	@PostMapping
 	public ResponseEntity<ProductResponse> save(@RequestBody ProductRequest request) {
-		log.info(request.getCategory());
 		log.info("New '" + new Object() {
 		}.getClass().getEnclosingMethod().getName() + "' request to " + this.getClass().getName());
 
