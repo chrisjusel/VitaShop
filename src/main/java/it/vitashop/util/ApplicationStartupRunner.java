@@ -3,7 +3,6 @@ package it.vitashop.util;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,9 @@ import org.springframework.stereotype.Component;
 import it.vitashop.model.Categories;
 import it.vitashop.model.Category;
 import it.vitashop.model.Product;
+import it.vitashop.model.Role;
+import it.vitashop.model.Roles;
+import it.vitashop.security.service.RoleService;
 import it.vitashop.service.CategoryService;
 import it.vitashop.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +38,15 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 
 	@Autowired
 	private ConversionService conversionService;
+	
+	@Autowired
+	private RoleService roleService;
 
 	@Override
 	public void run(String... args) throws Exception {
+		initCategories();
+		initRoles();
 		if (populateDatabase) {
-			initCategories();
 			initProducts();
 		}
 
@@ -65,6 +71,14 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void initRoles() {
+		for (Roles role : Roles.values()) {
+			Role saveToDb = new Role();
+			saveToDb.setRoleName(role);
+			roleService.save(saveToDb);
 		}
 	}
 }
