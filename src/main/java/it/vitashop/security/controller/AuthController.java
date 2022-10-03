@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.vitashop.exception.AccountNotEnabledException;
 import it.vitashop.model.User;
 import it.vitashop.security.jwt.JwtUtils;
 import it.vitashop.security.model.LoginRequest;
@@ -36,10 +37,10 @@ public class AuthController {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private ConversionService conversionService;
 
@@ -47,39 +48,47 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	/**
-	 * In questo metodo viene generato e restituito il token all'interno
-	 * del model di risposta creato in precedenza
+	 * In questo metodo viene generato e restituito il token all'interno del model
+	 * di risposta creato in precedenza
+	 * 
 	 * @param loginRequest
 	 * @return
 	 */
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-		log.info("New POST request: login");
+		log.info("New '" + new Object() {
+		}.getClass().getEnclosingMethod().getName() + "' request to " + this.getClass().getName());
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-		
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String token = jwtUtils.generateJwtToken(authentication);
-		
+
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-				.collect(Collectors.toList());
-		
-		LoginResponse loginResponse = new LoginResponse();
-		
-		loginResponse.setToken(token);
-		loginResponse.setRoles(roles);
-		
-		return ResponseEntity.ok(loginResponse);
+		if (userDetails.isEnabled()) {
+			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+					.collect(Collectors.toList());
+
+			LoginResponse loginResponse = new LoginResponse();
+
+			loginResponse.setToken(token);
+			loginResponse.setRoles(roles);
+
+			return ResponseEntity.ok(loginResponse);
+		} else
+			throw new AccountNotEnabledException("You have to activate your account first");
 	}
-	
+
 	/**
 	 * Salvataggio di un nuovo utente sul db
+	 * 
 	 * @param userDto
 	 * @return
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<User> save(@RequestBody UserRequest userRequest) {
+		log.info("New '" + new Object() {
+		}.getClass().getEnclosingMethod().getName() + "' request to " + this.getClass().getName());
 		User user = conversionService.convert(userRequest, User.class);
 		User res = userService.save(user);
 		return new ResponseEntity<User>(res, HttpStatus.OK);

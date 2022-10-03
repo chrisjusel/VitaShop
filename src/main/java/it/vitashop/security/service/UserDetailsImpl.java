@@ -16,14 +16,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDetailsImpl implements UserDetails{
+public class UserDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = 6442761663785287423L;
-	
+
 	private Long id;
 	private String username;
 	private String email;
-	
+	private boolean isActive;
+
 	@JsonIgnore
 	private String password;
 	private boolean isEnabled;
@@ -32,26 +33,25 @@ public class UserDetailsImpl implements UserDetails{
 	private boolean credentialsNonExpired;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Long id, String username, String email, String password,
+	public UserDetailsImpl(Long id, String username, String email, String password, boolean isActive,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
+		this.isEnabled = isActive;
 		this.password = password;
 		this.accountNonLocked = true;
 		this.accountNonExpired = true;
 		this.credentialsNonExpired = true;
-		this.isEnabled = true;
 		this.authorities = authorities;
 	}
-	
+
 	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
-				.collect(Collectors.toList());
-		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), authorities);
+				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name())).collect(Collectors.toList());
+		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.isActive(), authorities);
 	}
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
@@ -84,7 +84,7 @@ public class UserDetailsImpl implements UserDetails{
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return isEnabled;
 	}
 
 }

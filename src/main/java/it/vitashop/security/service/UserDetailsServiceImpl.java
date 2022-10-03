@@ -10,10 +10,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import it.vitashop.exception.UserNotFoundException;
 import it.vitashop.model.User;
 import it.vitashop.security.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
@@ -29,6 +32,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		} else {
 			throw new UsernameNotFoundException("User not found with username: " + username);
 		}
+	}
+	
+	@Transactional
+	public User enable(User user) {
+		log.info("Enabiling user...");
+		Optional<User> userResponse = userRepository.findById(user.getId());
+		if(userResponse.isPresent()) {
+			log.info("Enabling user " + userResponse.get().getEmail());
+			User updatedUser = userResponse.get();
+			updatedUser.setActive(true);
+			log.info("User enabled");
+			return updatedUser;
+		} else throw new UserNotFoundException("No user found");
 	}
 
 }
