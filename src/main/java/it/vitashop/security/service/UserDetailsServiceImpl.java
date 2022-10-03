@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import it.vitashop.exception.UserNotFoundException;
+import it.vitashop.model.Customer;
 import it.vitashop.model.User;
 import it.vitashop.security.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;

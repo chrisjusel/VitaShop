@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,6 +43,9 @@ public class User {
 	private String email;
 	
 	private boolean isActive;
+	
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private Customer customer = new Customer();
 	
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable

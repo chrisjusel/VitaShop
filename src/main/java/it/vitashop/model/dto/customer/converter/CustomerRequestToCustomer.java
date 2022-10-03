@@ -10,9 +10,6 @@ public class CustomerRequestToCustomer implements Converter<CustomerRequest, Cus
 	@Override
 	public Customer convert(CustomerRequest source) {
 		Customer target = new Customer();
-		target.setUsername(source.getUsername());
-		target.setPassword(source.getPassword());
-		target.setEmail(source.getEmail());
 		target.setName(source.getName());
 		target.setLastName(source.getLastName());
 		target.setPhoneNumber(source.getPhoneNumber());

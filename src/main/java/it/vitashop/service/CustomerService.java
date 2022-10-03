@@ -19,7 +19,7 @@ public class CustomerService {
 
 	public Customer save(Customer customer) {
 		log.info("Adding new customer...");
-		log.info("New customer '" + customer.getUsername() + "' addedd");
+		log.info("New customer '" + customer.getName() + "' addedd");
 		return customerRepository.save(customer);
 	}
 

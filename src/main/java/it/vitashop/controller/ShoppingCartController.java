@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,8 @@ public class ShoppingCartController {
 	private ConversionService conversionService;
 
 	@PostMapping
+	@PreAuthorize(value = "hasRole('ADMIN')"
+	        + "or authentication.principal.equals(#request.customer) ")
 	public ResponseEntity<ShoppingCartResponse> addCartItem(@RequestBody CartItemRequest request) {
 		CartItem cartItem = conversionService.convert(request, CartItem.class);
 		ShoppingCart shoppingCart = shoppingCartService.addCartItem(cartItem);

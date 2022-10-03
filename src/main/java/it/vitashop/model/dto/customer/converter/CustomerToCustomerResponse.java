@@ -10,11 +10,9 @@ public class CustomerToCustomerResponse implements Converter<Customer, CustomerR
 	@Override
 	public CustomerResponse convert(Customer source) {
 		CustomerResponse target = new CustomerResponse();
-		target.setId(source.getId());
 		target.setLastName(source.getLastName());
 		target.setName(source.getName());
 		target.setPhoneNUmber(source.getPhoneNumber());
-		target.setUsername(source.getUsername());
 		return target;
 	}
 
