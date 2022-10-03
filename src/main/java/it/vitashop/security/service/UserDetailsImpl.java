@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import it.vitashop.model.Customer;
 import it.vitashop.model.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,21 +25,25 @@ public class UserDetailsImpl implements UserDetails {
 	private String username;
 	private String email;
 	private boolean isActive;
+	private Customer customer;
 
 	@JsonIgnore
 	private String password;
 	private boolean isEnabled;
+	
 	private boolean accountNonLocked;
 	private boolean accountNonExpired;
 	private boolean credentialsNonExpired;
+	
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Long id, String username, String email, String password, boolean isActive,
+	public UserDetailsImpl(Long id, String username, String email, String password, boolean isActive, Customer customer,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.isEnabled = isActive;
+		this.customer = customer;
 		this.password = password;
 		this.accountNonLocked = true;
 		this.accountNonExpired = true;
@@ -49,7 +54,8 @@ public class UserDetailsImpl implements UserDetails {
 	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name())).collect(Collectors.toList());
-		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), user.isActive(), authorities);
+		return new UserDetailsImpl(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),
+				user.isActive(), user.getCustomer(), authorities);
 	}
 
 	@Override

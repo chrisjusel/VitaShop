@@ -32,7 +32,7 @@ public class ShoppingCartController {
 
 	@PostMapping
 	@PreAuthorize(value = "hasRole('ADMIN')"
-	        + "or authentication.principal.equals(#request.customer) ")
+	        + "or authentication.principal.customer.id.equals(#request.customer) ")
 	public ResponseEntity<ShoppingCartResponse> addCartItem(@RequestBody CartItemRequest request) {
 		CartItem cartItem = conversionService.convert(request, CartItem.class);
 		ShoppingCart shoppingCart = shoppingCartService.addCartItem(cartItem);
