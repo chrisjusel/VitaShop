@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import it.vitashop.exception.UserNotFoundException;
@@ -23,16 +24,22 @@ public class UserService {
 
 	@Autowired
 	private ConfirmationTokenService confirmationTokenService;
-	
+
 	@Autowired
 	private EmailSenderService emailSenderService;
 
-	public User save(User user) {
+	public User save(User user, boolean sendConfirmation) {
 		log.info("Saving new user " + user.getEmail());
+		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 		User response = userRepository.save(user);
-		ConfirmationToken confirmationToken = confirmationTokenService.createConfirmationToken(response);
-		emailSenderService.sendSimpleMessage(user.getEmail(), confirmationToken);
+		if (sendConfirmation) {
+			ConfirmationToken confirmationToken = confirmationTokenService.createConfirmationToken(response);
+			emailSenderService.sendSimpleMessage(user.getEmail(), confirmationToken);
+		} else {
+			response.setActive(true);
+			response = userRepository.save(user);
+		}
 		return response;
 	}
-	
+
 }

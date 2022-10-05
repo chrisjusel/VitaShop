@@ -47,7 +47,7 @@ public class User {
 	@OneToOne(cascade = CascadeType.PERSIST)
 	private Customer customer = new Customer();
 	
-	@ManyToMany(cascade = CascadeType.PERSIST)
+	@ManyToMany
 	@JoinTable
 	private Set<Role> roles = new HashSet<>();
 }

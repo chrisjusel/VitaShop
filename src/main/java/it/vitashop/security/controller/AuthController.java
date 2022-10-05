@@ -92,12 +92,7 @@ public class AuthController {
 		log.info("New '" + new Object() {
 		}.getClass().getEnclosingMethod().getName() + "' request to " + this.getClass().getName());
 		User user = conversionService.convert(userRequest, User.class);
-		User res = userService.save(user);
+		User res = userService.save(user, true);
 		return new ResponseEntity<User>(res, HttpStatus.OK);
-	}
-
-	@GetMapping
-	public ResponseEntity<Principal> getUserDetails(Principal principal) {
-		return new ResponseEntity<>(principal, HttpStatus.OK);
 	}
 }

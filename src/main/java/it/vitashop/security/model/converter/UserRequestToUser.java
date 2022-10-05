@@ -23,7 +23,7 @@ public class UserRequestToUser implements Converter<UserRequest, User>{
 		User userRes = new User();
 		userRes.setUsername(userDto.getUsername());
 		userRes.setEmail(userDto.getEmail());
-		userRes.setPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()));
+		userRes.setPassword(userDto.getPassword());
 		/**
 		 * se la lista non è vuota e dall'esterno arriva il nome di un ruolo che esiste
 		 * esso viene convertito in un'oggetto di tipo ruolo ed associato all'utente

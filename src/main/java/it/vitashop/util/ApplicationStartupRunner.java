@@ -16,7 +16,10 @@ import it.vitashop.model.Category;
 import it.vitashop.model.Product;
 import it.vitashop.model.Role;
 import it.vitashop.model.Roles;
+import it.vitashop.model.User;
+import it.vitashop.security.model.UserRequest;
 import it.vitashop.security.service.RoleService;
+import it.vitashop.security.service.UserService;
 import it.vitashop.service.CategoryService;
 import it.vitashop.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,11 +44,15 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 	
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public void run(String... args) throws Exception {
 		initCategories();
 		initRoles();
+		initUser();
 		if (populateDatabase) {
 			initProducts();
 		}
@@ -80,5 +87,14 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 			saveToDb.setRoleName(role);
 			roleService.save(saveToDb);
 		}
+	}
+	
+	private void initUser() {
+		UserRequest userRequest = new UserRequest();
+		userRequest.setUsername("test");
+		userRequest.setPassword("test");
+		userRequest.setEmail("test@test.com");
+		User user = conversionService.convert(userRequest, User.class);
+		userService.save(user, false);
 	}
 }
